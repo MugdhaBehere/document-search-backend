@@ -4,7 +4,17 @@ import java.util.List;
 import java.util.Scanner;
 
 public class DocumentSearchCLI {
-    private static final DocumentSearchEngine engine = new DocumentSearchEngine();
+    private static DocumentSearchEngine engine;
+
+    static {
+        try {
+            engine = new DocumentSearchEngine();
+        } catch (Exception e) {
+            System.err.println("Error initializing DocumentSearchEngine: " + e.getMessage());
+            e.printStackTrace();
+            System.exit(1); // Exit if database initialization fails
+        }
+    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -58,5 +68,9 @@ public class DocumentSearchCLI {
                     System.out.println("Invalid choice. Please try again.");
             }
         }
+    }
+
+    public static DocumentSearchEngine getEngine() {
+        return engine;
     }
 }

@@ -44,7 +44,11 @@
             <artifactId>rocksdbjni</artifactId>
             <version>8.0.0</version>
         </dependency>
-
+		<dependency>
+    <groupId>org.apache.kafka</groupId>
+    <artifactId>kafka-clients</artifactId>
+    <version>3.5.1</version>
+</dependency>
         <!-- ✅ Apache Commons Text (For Jaccard Similarity) -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -105,11 +109,16 @@
     </dependencies>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <mainClass>com.example.document_search_backend.DocumentSearchAPI</mainClass>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+
+
 </project>
