@@ -29,7 +29,9 @@ public class DocumentSearchEngine {
     private Trie trie = new Trie();
     private BloomFilterService bloomFilterService = new BloomFilterService(1000);
     private ExecutorService executor = Executors.newFixedThreadPool(4);
-    private Jedis redisClient = new Jedis("redis://localhost:6379");
+    private static final String DEFAULT_REDIS_URL = "redis://localhost:6379";
+
+    private Jedis redisClient = new Jedis(System.getenv().getOrDefault("REDIS_URL", DEFAULT_REDIS_URL));
 
     private static final String KAFKA_TOPIC = "document_index";
     private KafkaProducer<String, String> kafkaProducer;
