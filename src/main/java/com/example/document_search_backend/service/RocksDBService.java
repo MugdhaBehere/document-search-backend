@@ -1,21 +1,33 @@
 package com.example.document_search_backend.service;
 
+import java.io.File;
+
 import org.rocksdb.Options;
 import org.rocksdb.RocksDB;
 import org.rocksdb.RocksDBException;
 
 public class RocksDBService {
-    private static RocksDB db;
-    private static final String DB_PATH = "/Users/mugdhabehere/document-search-backend/rocksdb_data";
-
+    private static final String DB_PATH = System.getenv().getOrDefault("ROCKSDB_PATH", "rocksdb_data");
+    private final RocksDB db;
 
     static {
         RocksDB.loadLibrary();
     }
 
     public RocksDBService() throws RocksDBException {
-        Options options = new Options().setCreateIfMissing(true);
-        db = RocksDB.open(options, DB_PATH);
+        try {
+            // ✅ Ensure directory exists before opening RocksDB
+            File dbDir = new File(DB_PATH);
+            if (!dbDir.exists()) {
+                dbDir.mkdirs();
+            }
+
+            Options options = new Options().setCreateIfMissing(true);
+            this.db = RocksDB.open(options, DB_PATH);
+        } catch (RocksDBException e) {
+            System.err.println("Error initializing RocksDB: " + e.getMessage());
+            throw e;
+        }
     }
 
     public void put(String key, String value) throws RocksDBException {
