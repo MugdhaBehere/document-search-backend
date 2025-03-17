@@ -16,12 +16,14 @@ import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.rocksdb.RocksDBException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.document_search_backend.service.RocksDBService;
 
 import opennlp.tools.stemmer.PorterStemmer;
 import redis.clients.jedis.Jedis;
-
+@RestController
 public class DocumentSearchEngine {
     private static final String DEFAULT_REDIS_URL = "redis://localhost:6379";
     private static final String KAFKA_TOPIC = "document_index";
@@ -46,7 +48,8 @@ public class DocumentSearchEngine {
 
         kafkaProducer = new KafkaProducer<>(producerProps);
     }
-
+        
+    @PostMapping("/search/index")
     public void indexDocument(String docId, String content) {
         executor.submit(() -> {
             try {
